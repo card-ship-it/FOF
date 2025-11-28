@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-pic {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 25px;
+            border: none;
+            background: transparent;
+            color: #555;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .news-item, .event-item, .message-item {
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .news-item:hover, .event-item:hover, .message-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .news-item h3, .event-item h3, .message-item h3 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .meta-info {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .badge-urgent {
+            background: #dc3545;
+            color: white;
+        }
+
+        .badge-high {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .badge-featured {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .member-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .member-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .member-card:hover {
+            background: #e9ecef;
+            transform: scale(1.05);
+        }
+
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .notification-badge {
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-tabs {
+                justify-content: center;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🏢 Organization Portal</div>
+            <div class="user-info">
+                <span><strong>John Smith</strong></span>
+                <div class="profile-pic">JS</div>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('dashboard')">📊 Dashboard</button>
+            <button class="tab-btn" onclick="showTab('news')">📰 News</button>
+            <button class="tab-btn" onclick="showTab('events')">📅 Events</button>
+            <button class="tab-btn" onclick="showTab('messages')">💬 Messages <span class="notification-badge">3</span></button>
+            <button class="tab-btn" onclick="showTab('members')">👥 Members</button>
+            <button class="tab-btn" onclick="showTab('documents')">📁 Documents</button>
+            <button class="tab-btn" onclick="showTab('announcements')">📢 Announcements</button>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="content-section active">
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <h3>👥 Active Members</h3>
+                    <div class="number">2,147</div>
+                </div>
+                <div class="stat-card">
+                    <h3>📰 News Articles</h3>
+                    <div class="number">342</div>
+                </div>
+                <div class="stat-card">
+                    <h3>📅 Upcoming Events</h3>
+                    <div class="number">12</div>
+                </div>
+                <div class="stat-card">
+                    <h3>📁 Documents</h3>
+                    <div class="number">1,856</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🔥 Recent News</h2>
+                <div class="news-item">
+                    <h3>New 2025 Strategy <span class="badge badge-featured">FEATURED</span></h3>
+                    <div class="meta-info">📅 Nov 19, 2025 | ✍️ Mary Lambert | 👁️ 1,234 views</div>
+                    <p>Discover our new strategy for 2025 with ambitious objectives...</p>
+                </div>
+                <div class="news-item">
+                    <h3>Q3 Quarter Results</h3>
+                    <div class="meta-info">📅 Nov 15, 2025 | ✍️ Peter Martin | 👁️ 892 views</div>
+                    <p>The third quarter results show significant growth...</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📅 Upcoming Events</h2>
+                <div class="event-item">
+                    <h3>🎉 Annual General Meeting</h3>
+                    <div class="meta-info">📅 November 25, 2025, 2:00 PM | 📍 Conference Room A | 👥 87/150 registered</div>
+                    <button class="btn btn-primary">Register</button>
+                </div>
+                <div class="event-item">
+                    <h3>🎓 Leadership Training</h3>
+                    <div class="meta-info">📅 December 2, 2025, 9:00 AM | 📍 Training Center | 👥 24/30 registered</div>
+                    <button class="btn btn-primary">Register</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- News -->
+        <div id="news" class="content-section">
+            <div class="card">
+                <h2>📰 All News</h2>
+                <input type="text" class="search-box" placeholder="🔍 Search for news...">
+                <div class="news-item">
+                    <h3>New 2025 Strategy <span class="badge badge-featured">FEATURED</span></h3>
+                    <div class="meta-info">📅 Nov 19, 2025 | ✍️ Mary Lambert | 📂 Strategy | 👁️ 1,234 views</div>
+                    <p>Discover our new strategy for 2025 with ambitious objectives for growth and innovation...</p>
+                    <button class="btn btn-primary">Read More</button>
+                </div>
+                <div class="news-item">
+                    <h3>Q3 Quarter Results</h3>
+                    <div class="meta-info">📅 Nov 15, 2025 | ✍️ Peter Martin | 📂 Finance | 👁️ 892 views</div>
+                    <p>The third quarter results show significant growth of 15%...</p>
+                    <button class="btn btn-primary">Read More</button>
+                </div>
+                <div class="news-item">
+                    <h3>New Strategic Partnership</h3>
+                    <div class="meta-info">📅 Nov 12, 2025 | ✍️ Sophie Woods | 📂 Partnerships | 👁️ 645 views</div>
+                    <p>We are proud to announce a new partnership with an international organization...</p>
+                    <button class="btn btn-primary">Read More</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events -->
+        <div id="events" class="content-section">
+            <div class="card">
+                <h2>📅 Events</h2>
+                <div class="event-item">
+                    <h3>🎉 Annual General Meeting</h3>
+                    <div class="meta-info">📅 November 25, 2025, 2:00 PM - 6:00 PM | 📍 Conference Room A | 🎫 87/150 registered</div>
+                    <p>Join us at our annual general meeting to discuss results and future projects.</p>
+                    <button class="btn btn-primary">Register</button>
+                </div>
+                <div class="event-item">
+                    <h3>🎓 Leadership Training</h3>
+                    <div class="meta-info">📅 December 2, 2025, 9:00 AM - 5:00 PM | 📍 Training Center | 🎫 24/30 registered</div>
+                    <p>Intensive training on leadership skills for managers.</p>
+                    <button class="btn btn-primary">Register</button>
+                </div>
+                <div class="event-item">
+                    <h3>🎊 Year-End Gala</h3>
+                    <div class="meta-info">📅 December 15, 2025, 7:00 PM - 11:00 PM | 📍 Grand Hotel | 🎫 156/200 registered</div>
+                    <p>Let's celebrate this year's achievements together at our annual gala.</p>
+                    <button class="btn btn-primary">Register</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div id="messages" class="content-section">
+            <div class="card">
+                <h2>💬 Messages</h2>
+                <button class="btn btn-primary" style="margin-bottom: 20px;">✉️ New Message</button>
+                <div class="message-item">
+                    <h3>Department Meeting <span class="badge badge-high">UNREAD</span></h3>
+                    <div class="meta-info">👤 Mary Lambert | 📅 Nov 19, 2025, 10:30 AM</div>
+                    <p>Hello, I would like to schedule a department meeting for next week...</p>
+                    <button class="btn btn-primary">Reply</button>
+                </div>
+                <div class="message-item">
+                    <h3>Document for Approval <span class="badge badge-high">UNREAD</span></h3>
+                    <div class="meta-info">👤 Peter Martin | 📅 Nov 18, 2025, 3:20 PM</div>
+                    <p>Could you please approve the document I sent you regarding project X...</p>
+                    <button class="btn btn-primary">Reply</button>
+                </div>
+                <div class="message-item">
+                    <h3>Event Invitation <span class="badge badge-high">UNREAD</span></h3>
+                    <div class="meta-info">👤 Sophie Woods | 📅 Nov 17, 2025, 9:45 AM</div>
+                    <p>I invite you to participate in our next networking event...</p>
+                    <button class="btn btn-primary">Reply</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Members -->
+        <div id="members" class="content-section">
+            <div class="card">
+                <h2>👥 Member Directory</h2>
+                <input type="text" class="search-box" placeholder="🔍 Search for a member...">
+                <div class="member-list">
+                    <div class="member-card">
+                        <div class="member-avatar">ML</div>
+                        <h3>Mary Lambert</h3>
+                        <p>Marketing Director</p>
+                        <p style="color: #666; font-size: 14px;">Marketing Department</p>
+                        <button class="btn btn-primary" style="margin-top: 10px;">Contact</button>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-avatar">PM</div>
+                        <h3>Peter Martin</h3>
+                        <p>Finance Manager</p>
+                        <p style="color: #666; font-size: 14px;">Finance Department</p>
+                        <button class="btn btn-primary" style="margin-top: 10px;">Contact</button>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-avatar">SW</div>
+                        <h3>Sophie Woods</h3>
+                        <p>Project Manager</p>
+                        <p style="color: #666; font-size: 14px;">IT Department</p>
+                        <button class="btn btn-primary" style="margin-top: 10px;">Contact</button>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-avatar">LB</div>
+                        <h3>Luke Brown</h3>
+                        <p>Senior Consultant</p>
+                        <p style="color: #666; font-size: 14px;">Consulting Department</p>
+                        <button class="btn btn-primary" style="margin-top: 10px;">Contact</button>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-avatar">AR</div>
+                        <h3>Anna Roberts</h3>
+                        <p>HR Director</p>
+                        <p style="color: #666; font-size: 14px;">HR Department</p>
+                        <button class="btn btn-primary" style="margin-top: 10px;">Contact</button>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-avatar">TC</div>
+                        <h3>Thomas Carter</h3>
+                        <p>Lead Developer</p>
+                        <p style="color: #666; font-size: 14px;">IT Department</p>
+                        <button class="btn btn-primary" style="margin-top: 10px;">Contact</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documents -->
+        <div id="documents" class="content-section">
+            <div class="card">
+                <h2>📁 Document Library</h2>
+                <input type="text" class="search-box" placeholder="🔍 Search for a document...">
+                <button class="btn btn-primary" style="margin-bottom: 20px;">📤 Upload Document</button>
+                <div class="news-item">
+                    <h3>📄 Annual Report 2024</h3>
+                    <div class="meta-info">📂 Finance | 📊 PDF - 2.4 MB | 📥 234 downloads | 📅 Nov 15, 2025</div>
+                    <button class="btn btn-primary">Download</button>
+                </div>
+                <div class="news-item">
+                    <h3>📋 Internal Procedures Guide</h3>
+                    <div class="meta-info">📂 Administration | 📊 PDF - 1.8 MB | 📥 456 downloads | 📅 Nov 10, 2025</div>
+                    <button class="btn btn-primary">Download</button>
+                </div>
+                <div class="news-item">
+                    <h3>📊 2025 Strategy Presentation</h3>
+                    <div class="meta-info">📂 Strategy | 📊 PPTX - 5.2 MB | 📥 189 downloads | 📅 Nov 8, 2025</div>
+                    <button class="btn btn-primary">Download</button>
+                </div>
+                <div class="news-item">
+                    <h3>📑 Leave Request Form</h3>
+                    <div class="meta-info">📂 HR | 📊 DOCX - 0.3 MB | 📥 892 downloads | 📅 Nov 1, 2025</div>
+                    <button class="btn btn-primary">Download</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Announcements -->
+        <div id="announcements" class="content-section">
+            <div class="card">
+                <h2>📢 Announcements</h2>
+                <div class="news-item" style="border-left-color: #dc3545;">
+                    <h3>🚨 System Maintenance <span class="badge badge-urgent">URGENT</span></h3>
+                    <div class="meta-info">📅 Active from Nov 20 to Nov 21, 2025 | 👤 System Admin</div>
+                    <p>System maintenance is scheduled for this weekend. The portal will be unavailable from Saturday 10 PM to Sunday 6 AM.</p>
+                </div>
+                <div class="news-item" style="border-left-color: #ff6b6b;">
+                    <h3>📋 Policy Update <span class="badge badge-high">IMPORTANT</span></h3>
+                    <div class="meta-info">📅 Active until Nov 30, 2025 | 👤 HR Management</div>
+                    <p>Please review the new organization policies available in the documents section.</p>
+                </div>
+                <div class="news-item">
+                    <h3>🎉 New Member Service</h3>
+                    <div class="meta-info">📅 Active since Nov 15, 2025 | 👤 Communications Team</div>
+                    <p>A new mentorship service is now available for all members. Sign up today!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected section
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                alert('Successfully logged out!');
+                // Redirect logic here
+            }
+        }
+
+        // Simulate real-time updates
+        setInterval(() => {
+            const viewCounts = document.querySelectorAll('.meta-info');
+            viewCounts.forEach(view => {
+                if (view.textContent.includes('views')) {
+                    const current = parseInt(view.textContent.match(/\d+/)[0]);
+                    view.textContent = view.textContent.replace(/\d+/, current + Math.floor(Math.random() * 3));
+                }
+            });
+        }, 5000);
+    </script>
+</body>
+</html>
